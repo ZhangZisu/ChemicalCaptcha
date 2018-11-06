@@ -39,6 +39,7 @@ export interface ICaptchaModel extends Document {
     name_en?: string;
     formula: string;
     image?: Buffer;
+    ready: boolean;
     fetchImage: () => Promise<void>;
 }
 
@@ -55,6 +56,11 @@ export const FileSchema = new Schema(
             required: true,
         },
         image: Buffer,
+        ready: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
     },
 );
 

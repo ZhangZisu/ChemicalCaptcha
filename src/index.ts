@@ -22,6 +22,7 @@ const fetchPage = (url: string) => {
             const dom = new JSDOM(body);
 
             const tbody = dom.window.document.querySelector("#ContentPlaceHolder1_ProductClassDetail > tbody");
+            const captchas = [];
             for (let i = 1; i < tbody.children.length; i++) {
                 const tr = tbody.children[i];
                 try {
@@ -31,11 +32,22 @@ const fetchPage = (url: string) => {
                     captcha.name_en = tr.children[2].textContent.trim();
                     captcha.formula = tr.children[3].textContent.trim();
                     await captcha.save();
+                    captchas.push(captcha);
                     console.log(`${captcha.name_zh || captcha.name_en} saved.`);
                 } catch (e) {
                     // Eat any error
                 }
             }
+            console.log("Downloading images");
+            await Promise.all(captchas.map(async captcha => {
+                try {
+                    await captcha.fetchImage();
+                    captcha.ready = true;
+                    await captcha.save();
+                } catch (e) {
+                    // Eat any error
+                }
+            }));
 
             const currentNode = dom.window.document.querySelector('#form1 font[color="#ff9933"]');
             const nextNode = currentNode.nextElementSibling;
@@ -50,11 +62,5 @@ const fetchPage = (url: string) => {
     do {
         nextPage = await fetchPage(nextPage);
     } while (nextPage != null);
-    const captchas = await Captcha.find();
-    await Promise.all(captchas.map(async c => {
-        console.log(`Fetching image for ${c.name_zh || c.name_en}`);
-        await c.fetchImage();
-        await c.save();
-    }))
     console.log("done");
 })();
