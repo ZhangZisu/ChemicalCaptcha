@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const request = require("request");
 const jsdom_1 = require("jsdom");
 const db_1 = require("./db");
-const startPage = "https://www.chemicalbook.com/CASDetailList_0.htm";
+const baseUrl = "https://www.chemicalbook.com";
+const startPage = "/CASDetailList_0.htm";
 const headers = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
     "Accept-Language": "en,zh-CN;q=0.9,zh;q=0.8",
@@ -16,7 +17,7 @@ const headers = {
 const fetchPage = (url) => {
     console.log(`Fetching ${url}`);
     return new Promise((resolve, reject) => {
-        request.get(url, { headers }, async (err, response, body) => {
+        request.get(url, { baseUrl, headers }, async (err, response, body) => {
             if (err)
                 return reject(err);
             const dom = new jsdom_1.JSDOM(body);
