@@ -45,6 +45,11 @@ exports.FileSchema = new mongoose_1.Schema({
         required: true,
     },
     image: Buffer,
+    ready: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
 });
 exports.FileSchema.methods.fetchImage = function () {
     const self = this;

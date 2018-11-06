@@ -71,6 +71,7 @@ FileSchema.methods.fetchImage = function() {
         request.get(url, { encoding: null }, (err, response, buffer) => {
             if (err) { return reject(err); }
             self.image = buffer;
+            resolve();
         });
     });
 };

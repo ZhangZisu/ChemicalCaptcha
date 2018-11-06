@@ -41,6 +41,7 @@ const fetchPage = (url: string) => {
             console.log("Downloading images");
             await Promise.all(captchas.map(async captcha => {
                 try {
+                    console.log(`Fetching ${captcha.name_zh || captcha.name_en}`);
                     await captcha.fetchImage();
                     captcha.ready = true;
                     await captcha.save();
