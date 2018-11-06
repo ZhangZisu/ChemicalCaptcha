@@ -33,7 +33,7 @@ process.on("SIGTERM", () => {
         process.exit(0);
     });
 });
-exports.FileSchema = new mongoose_1.Schema({
+exports.CaptchaSchema = new mongoose_1.Schema({
     cas: {
         type: String,
         required: true,
@@ -51,7 +51,7 @@ exports.FileSchema = new mongoose_1.Schema({
         default: false,
     },
 });
-exports.FileSchema.methods.fetchImage = function () {
+exports.CaptchaSchema.methods.fetchImage = function () {
     const self = this;
     const url = `https://www.chemicalbook.com/CAS/GIF/${self.cas}.gif`;
     return new Promise((resolve, reject) => {
@@ -60,8 +60,9 @@ exports.FileSchema.methods.fetchImage = function () {
                 return reject(err);
             }
             self.image = buffer;
+            resolve();
         });
     });
 };
-exports.Captcha = mongoose_1.model("File", exports.FileSchema);
+exports.Captcha = mongoose_1.model("Captcha", exports.CaptchaSchema);
 //# sourceMappingURL=db.js.map

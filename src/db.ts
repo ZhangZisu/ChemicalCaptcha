@@ -43,7 +43,7 @@ export interface ICaptchaModel extends Document {
     fetchImage: () => Promise<void>;
 }
 
-export const FileSchema = new Schema(
+export const CaptchaSchema = new Schema(
     {
         cas: {
             type: String,
@@ -64,7 +64,7 @@ export const FileSchema = new Schema(
     },
 );
 
-FileSchema.methods.fetchImage = function() {
+CaptchaSchema.methods.fetchImage = function() {
     const self = this as ICaptchaModel;
     const url = `https://www.chemicalbook.com/CAS/GIF/${self.cas}.gif`;
     return new Promise<void>((resolve, reject) => {
@@ -76,4 +76,4 @@ FileSchema.methods.fetchImage = function() {
     });
 };
 
-export const Captcha: Model<ICaptchaModel> = model<ICaptchaModel>("File", FileSchema);
+export const Captcha: Model<ICaptchaModel> = model<ICaptchaModel>("Captcha", CaptchaSchema);
