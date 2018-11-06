@@ -1,5 +1,5 @@
-import request = require("request");
 import { JSDOM } from "jsdom";
+import request = require("request");
 import { Captcha } from "./db";
 
 const baseUrl = "https://www.chemicalbook.com";
@@ -11,14 +11,14 @@ const headers = {
     "Host": "www.chemicalbook.com",
     "Referer": "https://www.chemicalbook.com/CASDetailList_0.htm",
     "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36",
 };
 
 const fetchPage = (url: string) => {
     console.log(`Fetching ${url}`);
     return new Promise<string>((resolve, reject) => {
         request.get(url, { baseUrl, headers }, async (err, response, body) => {
-            if (err) return reject(err);
+            if (err) { return reject(err); }
             const dom = new JSDOM(body);
 
             const tbody = dom.window.document.querySelector("#ContentPlaceHolder1_ProductClassDetail > tbody");
@@ -39,7 +39,7 @@ const fetchPage = (url: string) => {
                 }
             }
             console.log("Downloading images");
-            await Promise.all(captchas.map(async captcha => {
+            await Promise.all(captchas.map(async (captcha) => {
                 try {
                     console.log(`Fetching ${captcha.name_zh || captcha.name_en}`);
                     await captcha.fetchImage();
@@ -56,7 +56,7 @@ const fetchPage = (url: string) => {
             resolve(nextURL);
         });
     });
-}
+};
 
 (async () => {
     let nextPage = startPage;
