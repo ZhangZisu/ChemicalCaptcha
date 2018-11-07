@@ -58,10 +58,29 @@ const fetchPage = (url: string) => {
     });
 };
 
-(async () => {
+export const fetchData = async () => {
     let nextPage = startPage;
     do {
         nextPage = await fetchPage(nextPage);
     } while (nextPage != null);
     console.log("done");
-})();
+};
+
+export const fixData = async () => {
+    const badCaptchas = await Captcha.find({ ready: false });
+    await Promise.all(badCaptchas.map(async (captcha) => {
+        try {
+            console.log(`Fixing ${captcha.name_zh || captcha.name_en}`);
+            await captcha.fetchImage();
+            captcha.ready = true;
+            await captcha.save();
+            console.log(`Fixing ${captcha.name_zh || captcha.name_en} done`);
+        } catch (e) {
+            // Eat any error
+        }
+    }));
+};
+
+export const startServer = () => {
+    require("./http");
+};

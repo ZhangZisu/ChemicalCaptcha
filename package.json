@@ -7,15 +7,20 @@
   "author": "ZhangZisu <admin@zhangzisu.cn>",
   "license": "MIT",
   "dependencies": {
-    "@types/mongoose": "^5.3.1",
+    "express": "^4.16.4",
     "jsdom": "^13.0.0",
     "mongoose": "^5.3.9",
+    "redis": "^2.8.0",
     "request": "^2.88.0"
   },
   "devDependencies": {
+    "@types/express": "^4.16.0",
     "@types/jsdom": "^12.2.0",
+    "@types/mongoose": "^5.3.1",
     "@types/node": "^10.12.2",
+    "@types/redis": "^2.8.7",
     "@types/request": "^2.48.1",
+    "lodash": "^4.17.11",
     "tslint": "^5.11.0",
     "typescript": "^3.1.6"
   }

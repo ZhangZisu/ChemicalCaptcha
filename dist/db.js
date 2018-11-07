@@ -50,6 +50,16 @@ exports.CaptchaSchema = new mongoose_1.Schema({
         required: true,
         default: false,
     },
+    success_count: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
+    visit_count: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
 });
 exports.CaptchaSchema.methods.fetchImage = function () {
     const self = this;
@@ -65,4 +75,5 @@ exports.CaptchaSchema.methods.fetchImage = function () {
     });
 };
 exports.Captcha = mongoose_1.model("Captcha", exports.CaptchaSchema);
+exports.Captcha.ensureIndexes({ visit_count: 1, success_count: 1 });
 //# sourceMappingURL=db.js.map

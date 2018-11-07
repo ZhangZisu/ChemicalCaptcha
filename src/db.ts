@@ -40,6 +40,8 @@ export interface ICaptchaModel extends Document {
     formula: string;
     image?: Buffer;
     ready: boolean;
+    success_count: number;
+    visit_count: number;
     fetchImage: () => Promise<void>;
 }
 
@@ -61,6 +63,16 @@ export const CaptchaSchema = new Schema(
             required: true,
             default: false,
         },
+        success_count: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
+        visit_count: {
+            type: Number,
+            required: true,
+            default: 0,
+        },
     },
 );
 
@@ -77,3 +89,5 @@ CaptchaSchema.methods.fetchImage = function() {
 };
 
 export const Captcha: Model<ICaptchaModel> = model<ICaptchaModel>("Captcha", CaptchaSchema);
+
+Captcha.ensureIndexes({ visit_count: 1, success_count: 1 });

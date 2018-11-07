@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const request = require("request");
 const jsdom_1 = require("jsdom");
+const request = require("request");
 const db_1 = require("./db");
 const baseUrl = "https://www.chemicalbook.com";
 const startPage = "/CASDetailList_0.htm";
@@ -12,14 +12,15 @@ const headers = {
     "Host": "www.chemicalbook.com",
     "Referer": "https://www.chemicalbook.com/CASDetailList_0.htm",
     "Upgrade-Insecure-Requests": "1",
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36",
 };
 const fetchPage = (url) => {
     console.log(`Fetching ${url}`);
     return new Promise((resolve, reject) => {
         request.get(url, { baseUrl, headers }, async (err, response, body) => {
-            if (err)
+            if (err) {
                 return reject(err);
+            }
             const dom = new jsdom_1.JSDOM(body);
             const tbody = dom.window.document.querySelector("#ContentPlaceHolder1_ProductClassDetail > tbody");
             const captchas = [];
@@ -56,11 +57,28 @@ const fetchPage = (url) => {
         });
     });
 };
-(async () => {
+exports.fetchData = async () => {
     let nextPage = startPage;
     do {
         nextPage = await fetchPage(nextPage);
     } while (nextPage != null);
     console.log("done");
-})();
+};
+exports.fixData = async () => {
+    const badCaptchas = await db_1.Captcha.find({ ready: false });
+    await Promise.all(badCaptchas.map(async (captcha) => {
+        try {
+            console.log(`Fixing ${captcha.name_zh || captcha.name_en}`);
+            await captcha.fetchImage();
+            captcha.ready = true;
+            await captcha.save();
+            console.log(`Fixing ${captcha.name_zh || captcha.name_en} done`);
+        }
+        catch (e) {
+        }
+    }));
+};
+exports.startServer = () => {
+    require("./http");
+};
 //# sourceMappingURL=index.js.map
