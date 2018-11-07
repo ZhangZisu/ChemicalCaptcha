@@ -1,9 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
+const path_1 = require("path");
 const db_1 = require("./db");
 const redis_1 = require("./redis");
 const app = express();
+app.get("/", async (req, res) => {
+    res.sendFile(path_1.join(__dirname, "..", "index.html"));
+});
 app.get("/new", async (req, res) => {
     const sid = await redis_1.getsid();
     const captcha = await db_1.Captcha.findOneAndUpdate({}, { $inc: { visit_count: 1 } }).sort({ visit_count: 1, success_count: 1 });
@@ -27,6 +31,9 @@ app.get("/verify", async (req, res) => {
     else {
         return res.send({ success: false });
     }
+});
+app.get("/*", async (req, res) => {
+    res.redirect("https://github.com/ZhangZisu/ChemicalCaptcha");
 });
 app.listen(3549, () => {
     console.log("App started");

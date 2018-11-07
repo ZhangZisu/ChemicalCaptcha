@@ -61,6 +61,7 @@ exports.CaptchaSchema = new mongoose_1.Schema({
         default: 0,
     },
 });
+exports.CaptchaSchema.index({ visit_count: 1, success_count: 1 });
 exports.CaptchaSchema.methods.fetchImage = function () {
     const self = this;
     const url = `https://www.chemicalbook.com/CAS/GIF/${self.cas}.gif`;
@@ -75,5 +76,4 @@ exports.CaptchaSchema.methods.fetchImage = function () {
     });
 };
 exports.Captcha = mongoose_1.model("Captcha", exports.CaptchaSchema);
-exports.Captcha.ensureIndexes({ visit_count: 1, success_count: 1 });
 //# sourceMappingURL=db.js.map

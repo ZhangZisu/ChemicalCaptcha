@@ -1,5 +1,5 @@
 {
-  "name": "ChemicalCaptcha",
+  "name": "chemicalcaptcha",
   "version": "1.0.0",
   "description": "A simple Chemical captcha",
   "main": "dist/index.js",
@@ -10,6 +10,7 @@
     "express": "^4.16.4",
     "jsdom": "^13.0.0",
     "mongoose": "^5.3.9",
+    "path": "^0.12.7",
     "redis": "^2.8.0",
     "request": "^2.88.0"
   },

@@ -76,6 +76,8 @@ export const CaptchaSchema = new Schema(
     },
 );
 
+CaptchaSchema.index({ visit_count: 1, success_count: 1 });
+
 CaptchaSchema.methods.fetchImage = function() {
     const self = this as ICaptchaModel;
     const url = `https://www.chemicalbook.com/CAS/GIF/${self.cas}.gif`;
@@ -89,5 +91,3 @@ CaptchaSchema.methods.fetchImage = function() {
 };
 
 export const Captcha: Model<ICaptchaModel> = model<ICaptchaModel>("Captcha", CaptchaSchema);
-
-Captcha.ensureIndexes({ visit_count: 1, success_count: 1 });

@@ -1,8 +1,13 @@
 import express = require("express");
+import { join } from "path";
 import { Captcha } from "./db";
 import { del, get, getsid, set } from "./redis";
 
 const app = express();
+
+app.get("/", async (req, res) => {
+    res.sendFile(join(__dirname, "..", "index.html"));
+});
 
 app.get("/new", async (req, res) => {
     const sid = await getsid();

@@ -1,0 +1,52 @@
+<html>
+
+<head>
+    <title>ChemicalCaptcha</title>
+</head>
+
+<body>
+    <img id="c_img">
+    <hr />
+    <p>Chinese name: <code id="name_zh"></code></p>
+    <br>
+    <p>English name: <code id="name_en"></code></p>
+    <br>
+    <p id="sid"></p><br />
+    <button onclick="clicknew()" id="c_new">new captcha</button>
+    <br>
+    <input type="text" id="answer">
+    <br>
+    <button onclick="clicksubmit()">submit</button>
+    <script>
+        let c_img = document.getElementById("c_img");
+        let name_zh = document.getElementById("name_zh");
+        let name_en = document.getElementById("name_en");
+        let sid = document.getElementById("sid");
+        let answer = document.getElementById("answer");
+        let c_new = document.getElementById("c_new");
+        let clicknew = () => {
+            fetch("/new")
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    c_img.src = data.image;
+                    name_zh.innerText = data.name.zh;
+                    name_en.innerText = data.name.en;
+                    sid.innerText = data.sid;
+                });
+        };
+        let clicksubmit = () => {
+            fetch(`/verify?sid=${sid.textContent}&formula=${answer.val}`)
+                .then(res => {
+                    return res.json();
+                })
+                .then(data => {
+                    alert(data.success);
+                    location.reload();
+                });
+        }
+    </script>
+</body>
+
+</html>
